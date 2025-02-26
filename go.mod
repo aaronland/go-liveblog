@@ -1,6 +1,6 @@
 module github.com/aaronland/go-liveblog
 
-go 1.22.4
+go 1.24.0
 
 require (
 	github.com/aaronland/go-roster v1.0.0
@@ -9,6 +9,6 @@ require (
 )
 
 require (
-	golang.org/x/net v0.23.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/net v0.0.0-20200114155413-6afb5195e5aa // indirect
+	golang.org/x/text v0.3.0 // indirect
 )
