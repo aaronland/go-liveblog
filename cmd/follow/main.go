@@ -6,6 +6,7 @@ import (
 
 	"github.com/aaronland/go-liveblog/app/follow"
 	_ "github.com/aaronland/go-liveblog/guardian"
+	_ "github.com/aaronland/go-liveblog/lapresse"	
 	_ "github.com/aaronland/go-liveblog/lemonde"
 )
 
