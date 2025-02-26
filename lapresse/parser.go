@@ -95,8 +95,9 @@ func (p *LaPresseParser) getPostsNorkon(ctx context.Context, url string) ([]stri
 
 	allowed_classes := []string{
 		"ncpost-content",
-		"ncpost-comment-content",
-		"ncpost-user-comment",
+		// "ncpost-comment-content",
+		// "ncpost-user-comment",
+		// "ncpost-list-post",
 	}
 
 	for _, d := range divs {
@@ -108,7 +109,7 @@ func (p *LaPresseParser) getPostsNorkon(ctx context.Context, url string) ([]stri
 			continue
 		}
 
-		slog.Debug("Process", "class", d_class)
+		slog.Debug("Process", "class", d_class, "text", d.FullText())
 		posts = append(posts, d.FullText())
 	}
 
