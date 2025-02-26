@@ -17,6 +17,8 @@ go build -mod vendor -ldflags="-s -w" -o bin/follow cmd/follow/main.go
 
 #### Example
 
+##### The Guardian and Le Monde
+
 ```
 > ./bin/follow \
 	https://www.lemonde.fr/sport/live/2024/08/07/direct-volley-ball-france-italie-suivez-le-match-des-demi-finales-du-tournoi-masculin-aux-jo-2024_6272013_3242.html \
@@ -31,3 +33,6 @@ go build -mod vendor -ldflags="-s -w" -o bin/follow cmd/follow/main.go
 
 2024/08/07 11:10:46 INFO Also in the second race is Letsile Tebogo of Botswana. Real talk, this isn’t the strongest field we’ve ever had, but he might be Lyles’ closest challenger; remember, Lyles hasn’t lost in 26 races, – since the final in Tokyo.
 ```
+
+##### La Presse
+
