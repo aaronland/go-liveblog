@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/aaronland/go-liveblog/dispatcher"
 	"github.com/aaronland/go-liveblog/parser"
-	"github.com/aaronland/go-liveblog/speaker"
 	"github.com/sfomuseum/go-flags/flagset"
 )
 
@@ -80,11 +80,11 @@ func handle_posts(ctx context.Context, cache *sync.Map, mu *sync.RWMutex, read b
 		slog.Error("Failed to derive new parser", "uri", p_uri, "error", err)
 	}
 
-	sp_uri := fmt.Sprintf("%s://", u.Host)
-	sp, err := speaker.NewSpeaker(ctx, sp_uri)
+	dp_uri := fmt.Sprintf("%s://", u.Host)
+	dp, err := dispatcher.NewDispatcher(ctx, dp_uri)
 
 	if err != nil {
-		slog.Error("Failed to derive new speaker", "uri", sp_uri, "error", err)
+		slog.Error("Failed to derive new dispatcher", "uri", dp_uri, "error", err)
 	}
 
 	title, posts, err := p.GetPosts(ctx, url)
@@ -110,11 +110,11 @@ func handle_posts(ctx context.Context, cache *sync.Map, mu *sync.RWMutex, read b
 		if read {
 
 			if read_title && !title_read {
-				sp.ReadPost(ctx, title)
+				dp.Dispatch(ctx, title)
 				title_read = false
 			}
 
-			sp.ReadPost(ctx, p)
+			dp.Dispatch(ctx, p)
 		}
 	}
 }

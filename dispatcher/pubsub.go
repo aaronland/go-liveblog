@@ -1,4 +1,4 @@
-package speaker
+package dispatcher
 
 import (
 	"context"
@@ -8,8 +8,8 @@ import (
 	"github.com/sfomuseum/go-pubsub/publisher"
 )
 
-type PubSubSpeaker struct {
-	Speaker
+type PubSubDispatcher struct {
+	Dispatcher
 	publisher publisher.Publisher
 }
 
@@ -18,14 +18,14 @@ func init() {
 
 	for _, scheme := range publisher.PublisherSchemes() {
 
-		err := RegisterSpeaker(ctx, scheme, NewPubSubSpeaker)
+		err := RegisterDispatcher(ctx, scheme, NewPubSubDispatcher)
 		if err != nil {
 			panic(err)
 		}
 	}
 }
 
-func NewPubSubSpeaker(ctx context.Context, uri string) (Speaker, error) {
+func NewPubSubDispatcher(ctx context.Context, uri string) (Dispatcher, error) {
 
 	p, err := publisher.NewPublisher(ctx, uri)
 
@@ -33,19 +33,19 @@ func NewPubSubSpeaker(ctx context.Context, uri string) (Speaker, error) {
 		return nil, fmt.Errorf("Failed to create new publisher, %w", err)
 	}
 
-	return NewPubSubSpeakerWithPublisher(ctx, p)
+	return NewPubSubDispatcherWithPublisher(ctx, p)
 }
 
-func NewPubSubSpeakerWithPublisher(ctx context.Context, p publisher.Publisher) (Speaker, error) {
+func NewPubSubDispatcherWithPublisher(ctx context.Context, p publisher.Publisher) (Dispatcher, error) {
 
-	s := &PubSubSpeaker{
+	s := &PubSubDispatcher{
 		publisher: p,
 	}
 
 	return s, nil
 }
 
-func (s *PubSubSpeaker) ReadPost(ctx context.Context, post string) error {
+func (s *PubSubDispatcher) Dispatch(ctx context.Context, post string) error {
 	slog.Info(post)
 	return s.publisher.Publish(ctx, post)
 }
