@@ -8,10 +8,13 @@ import (
 	net_url "net/url"
 	"sync"
 	"time"
-
+	"net/http"
+	
 	"github.com/aaronland/go-liveblog/dispatcher"
 	"github.com/aaronland/go-liveblog/parser"
 	"github.com/sfomuseum/go-flags/flagset"
+	"github.com/sfomuseum/go-pubsub/subscriber"	
+	"github.com/whosonfirst/go-pubssed/broker"
 )
 
 func Run(ctx context.Context) error {
@@ -30,6 +33,36 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 
 	urls := fs.Args()
 
+	foo := false
+
+	if foo {
+		
+		sub, err := subscriber.NewSubscriber(ctx, "redis://?host=localhost&port=6379&channel=pubssed")
+		
+		if err != nil {
+			return err
+		}
+		
+		brkr, err := broker.NewBroker()
+
+		if err != nil {
+			return err
+		}	
+
+		http_handler, err := brkr.HandlerFunc()
+
+		if err != nil {
+			return err
+		}
+		
+		brkr.Start(ctx, sub)
+
+		mux := http.NewServeMux()
+		mux.HandleFunc("/", http_handler)
+		
+		go http.ListenAndServe("localhost:8080", mux)
+	}
+	
 	cache := new(sync.Map)
 	mu := new(sync.RWMutex)
 
