@@ -2,6 +2,8 @@
 
 Go package for starting a local	webserver and then opening its URL in a target environment once it (the web server) is running.
 
+For background, have a look at the [Small focused tools for visualizing geographic data](https://millsfield.sfomuseum.org/blog/2024/10/02/show/) blog post.
+
 ## Usage
 
 This package is meant to be used by other packages that have configured a [http.Mux](https://pkg.go.dev/net/http#ServeMux) instance for serving web requests. The package will start a web server on localhost listening on a randomly chose port number (unless a user-defined value is provided) and then open that URL in a target environment (like a web browser).
@@ -61,7 +63,7 @@ browser, _ := show.NewBrowser(ctx, "web://")
 
 ### WebViewBrowser (webview://)
 
-Open URLs in a dedicated application window using the [webview/webview_go](https://github.com/webview/webview_go) package. The `WebViewBrowsr` implementation can be instantiated like this:
+Open URLs in a dedicated application window using the [webview/webview_go](https://github.com/webview/webview_go) package. The `WebViewBrowser` implementation can be instantiated like this:
 
 ```
 browser, _ = show.NewBrowser(ctx, "webview://?width=500&height=700")

@@ -10,7 +10,7 @@ require (
 	github.com/brianvoe/gofakeit/v7 v7.15.0
 	github.com/sfomuseum/go-flags v0.12.1
 	github.com/sfomuseum/go-pubsub v0.0.24
-	github.com/sfomuseum/go-www-show/v2 v2.0.0
+	github.com/sfomuseum/go-www-show/v2 v2.1.0
 	github.com/whosonfirst/go-pubssed v0.6.5
 )
 

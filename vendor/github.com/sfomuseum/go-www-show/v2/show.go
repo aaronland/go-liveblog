@@ -17,7 +17,8 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
 	port := opts.Port
 	host := opts.Host
-
+	delay := opts.EnsureServiceDelay
+	
 	if host == "" {
 		host = "localhost"
 	}
@@ -37,6 +38,10 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		if err != nil {
 			return fmt.Errorf("Failed to close listener used to derive port, %w", err)
 		}
+	}
+
+	if delay.String() == "0s" {
+		delay = 100 * time.Millisecond
 	}
 
 	//
@@ -82,7 +87,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
 	server_ready := false
 
-	ticker := time.NewTicker(100 * time.Millisecond)
+	ticker := time.NewTicker(opts.EnsureServiceDelay)
 	defer ticker.Stop()
 
 	for {

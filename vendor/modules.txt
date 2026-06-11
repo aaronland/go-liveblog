@@ -210,8 +210,8 @@ github.com/sfomuseum/go-flags/flagset
 github.com/sfomuseum/go-pubsub
 github.com/sfomuseum/go-pubsub/publisher
 github.com/sfomuseum/go-pubsub/subscriber
-# github.com/sfomuseum/go-www-show/v2 v2.0.0
-## explicit; go 1.23.0
+# github.com/sfomuseum/go-www-show/v2 v2.1.0
+## explicit; go 1.25.0
 github.com/sfomuseum/go-www-show/v2
 # github.com/webview/webview_go v0.0.0-20240831120633-6173450d4dd6
 ## explicit; go 1.13

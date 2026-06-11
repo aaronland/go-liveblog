@@ -1,28 +1,42 @@
 window.addEventListener("load", function load(event){
 
+    console.log("INIT");
+    
     const voices_el = document.querySelector("#voices");
     const messages_el = document.querySelector("#messages");
+
+    var voices;
     
-    const voices = window.speechSynthesis.getVoices();
     const default_voice = 22;
     
-    const count_voices = voices.length;
+    const list_voices = function(){
 
-    for (var i = 0; i < count_voices; i++) {
+	voices = window.speechSynthesis.getVoices();
+	const count_voices = voices.length;
 
-	const opt = document.createElement("option");
-	opt.setAttribute("class", "voice");
-	opt.setAttribute("value", i);
-
-	if (i == default_voice){
-	    opt.setAttribute("selected", "selected");
+	if (count_voices == 0){
+	    setTimeout(list_voices, 200);
+	    return;
 	}
-	
-	const label = voices[i].name + " (" + voices[i].lang + ")";
-	opt.appendChild(document.createTextNode(label));
+	    
+	for (var i = 0; i < count_voices; i++) {
+	    
+	    const opt = document.createElement("option");
+	    opt.setAttribute("class", "voice");
+	    opt.setAttribute("value", i);
+	    
+	    if (i == default_voice){
+		opt.setAttribute("selected", "selected");
+	    }
+	    
+	    const label = voices[i].name + " (" + voices[i].lang + ")";
+	    opt.appendChild(document.createTextNode(label));
+	    
+	    voices_el.appendChild(opt);
+	}
 
-	voices_el.appendChild(opt);
-    }
+	voices_el.style.display = "block";
+    };
     
     const scrub = function(raw) {
 	const doc = new DOMParser().parseFromString(raw, 'text/html');
@@ -46,6 +60,8 @@ window.addEventListener("load", function load(event){
 
 	window.speechSynthesis.speak(utterance);
     };
+
+    list_voices();
     
     const eventSource = new EventSource('/sse');
     
