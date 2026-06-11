@@ -7,14 +7,20 @@
 	<meta name="HandheldFriendly" content="true">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>liveblog</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-5.3.8.min.css" />	
 	<link rel="stylesheet" type="text/css" href="css/index.css" />
     </head>
     <body>
-	<select id="voices">
-	</select>
-	
-	<ul id="messages">
-	</ul>
+	<div class="container">
+	    <div class="row">
+		<select class="form-select" id="voices">
+		</select>
+	    </div>
+	    <div class="row">
+		<ul id="messages">
+		</ul>
+	    </div>
+	</div>
     </body>
     <script type="text/javascript" src="javascript/index.js"></script>
 </html>
