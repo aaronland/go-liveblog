@@ -12,6 +12,7 @@ import (
 
 	"github.com/aaronland/go-liveblog/dispatcher"
 	"github.com/aaronland/go-liveblog/parser"
+	"github.com/aaronland/go-liveblog/static/www"
 	"github.com/sfomuseum/go-flags/flagset"
 	"github.com/sfomuseum/go-pubsub/subscriber"
 	"github.com/whosonfirst/go-pubssed/broker"
@@ -39,7 +40,9 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 		return err
 	}
 
-	if www {
+	if www_ui {
+
+		mux := http.NewServeMux()
 
 		sub, err := subscriber.NewSubscriber(ctx, "redis://?host=localhost&port=6379&channel=pubssed")
 
@@ -53,7 +56,7 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 			return err
 		}
 
-		http_handler, err := brkr.HandlerFunc()
+		sse_handler, err := brkr.HandlerFunc()
 
 		if err != nil {
 			return err
@@ -61,8 +64,12 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 
 		brkr.Start(ctx, sub)
 
-		mux := http.NewServeMux()
-		mux.HandleFunc("/", http_handler)
+		mux.HandleFunc("/sse", sse_handler)
+
+		http_fs := http.FS(www.FS)
+		index_handler := http.FileServer(http_fs)
+
+		mux.Handle("/", index_handler)
 
 		go http.ListenAndServe("localhost:8080", mux)
 	}

@@ -12,7 +12,7 @@ var delay int
 var read_all bool
 var verbose bool
 
-var www bool
+var www_ui bool
 var dispatcher_uri string
 
 func DefaultFlagSet() *flag.FlagSet {
@@ -23,7 +23,7 @@ func DefaultFlagSet() *flag.FlagSet {
 	fs.BoolVar(&read_all, "read-all", false, "If true read all previous posts (written before following has begun)")
 	fs.BoolVar(&verbose, "verbose", false, "Enable verbose (debug) logging.")
 	fs.StringVar(&dispatcher_uri, "dispatcher-uri", "say://", "...")
-	fs.BoolVar(&www, "www", false, "...")
+	fs.BoolVar(&www_ui, "www", false, "...")
 
 	fs.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Parse one or more \"live blog\" URLs and read them aloud.\n")

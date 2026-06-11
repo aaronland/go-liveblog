@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"strings"
 
 	"github.com/sfomuseum/go-pubsub/publisher"
 )
@@ -18,7 +19,10 @@ func init() {
 
 	for _, scheme := range publisher.PublisherSchemes() {
 
+		scheme = strings.Replace(scheme, "://", "", 1)
+
 		err := RegisterDispatcher(ctx, scheme, NewPubSubDispatcher)
+
 		if err != nil {
 			panic(err)
 		}
@@ -46,6 +50,6 @@ func NewPubSubDispatcherWithPublisher(ctx context.Context, p publisher.Publisher
 }
 
 func (s *PubSubDispatcher) Dispatch(ctx context.Context, post string) error {
-	slog.Info(post)
+	slog.Debug("pubsub", "dispatch", post)
 	return s.publisher.Publish(ctx, post)
 }

@@ -1,0 +1,7 @@
+.timestamp {
+	font-weight: 700;
+}
+
+.timestamp:after {
+	content: " – ";
+}
