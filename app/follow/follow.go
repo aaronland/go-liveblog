@@ -9,17 +9,21 @@ import (
 	net_url "net/url"
 	"sync"
 	"time"
-
+	"os"
+	"os/signal"
+	"syscall"
+	
 	"github.com/aaronland/go-liveblog/dispatcher"
 	"github.com/aaronland/go-liveblog/parser"
 	"github.com/aaronland/go-liveblog/static/www"
 	"github.com/sfomuseum/go-flags/flagset"
 	"github.com/sfomuseum/go-pubsub/publisher"
 	"github.com/sfomuseum/go-pubsub/subscriber"
+	"github.com/sfomuseum/go-www-show/v2"	
 	"github.com/whosonfirst/go-pubssed/broker"
 )
 
-const WWW_DISPATCHER string = "www://"
+const WWW_DISPATCHER string = "web://"
 
 func Run(ctx context.Context) error {
 	fs := DefaultFlagSet()
@@ -35,25 +39,48 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 		slog.Debug("Verbose logging enabled")
 	}
 
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	sig_ch := make(chan os.Signal, 1)
+	signal.Notify(sig_ch, os.Interrupt, syscall.SIGTERM, syscall.SIGHUP)
+
+	go func() {
+		for s := range sig_ch {
+			switch s {
+			case os.Interrupt, syscall.SIGTERM:
+				slog.Info("Shutdown signal received.")
+				cancel()
+				os.Exit(0)
+			}
+		}
+	}()
+	
 	urls := fs.Args()
 
 	var dp dispatcher.Dispatcher
 
-	switch dispatcher_uri {
-	case WWW_DISPATCHER:
+	dp_u, err := net_url.Parse(dispatcher_uri)
 
+	if err != nil {
+		return fmt.Errorf("Failed to parse dispatcher URI, %w", err)
+	}
+	
+	switch dp_u.Scheme {
+	case "web", "webview":	// read from constants in go-www-show/v2...
+		
 		dp_ch := make(chan string)
 
 		pub, err := publisher.NewChannelPublisherWithChannel(ctx, dp_ch)
 
 		if err != nil {
-			return err
+			return fmt.Errorf("Failed to create channel publisher, %w", err)
 		}
 
 		sub, err := subscriber.NewChannelSubscriberWithChannel(ctx, dp_ch)
 
 		if err != nil {
-			return nil
+			return fmt.Errorf("Failed to create channel subscribed, %w", err)
 		}
 
 		defer sub.Close()
@@ -61,7 +88,7 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 		d, err := dispatcher.NewPubSubDispatcherWithPublisher(ctx, pub)
 
 		if err != nil {
-			return err
+			return fmt.Errorf("Failed to create pubsub dispatcher, %w", err)
 		}
 
 		dp = d
@@ -71,13 +98,13 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 		brkr, err := broker.NewBroker()
 
 		if err != nil {
-			return err
+			return fmt.Errorf("Failed to create pubsub-sse broker, %w", err)
 		}
 
 		sse_handler, err := brkr.HandlerFunc()
 
 		if err != nil {
-			return err
+			return fmt.Errorf("Failed to create pubsub-sse handler, %w", err)
 		}
 
 		brkr.Start(ctx, sub)
@@ -89,14 +116,32 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 
 		mux.Handle("/", index_handler)
 
-		go http.ListenAndServe("localhost:8080", mux)
+		browser, err := show.NewBrowser(ctx, dispatcher_uri)
+
+		if err != nil {
+			return fmt.Errorf("Failed to create new browser, %w", err)
+		}
+
+		show_opts := &show.RunOptions{
+			Browser: browser,
+			Mux:     mux,
+		}
+		
+		go func() {
+			
+			err := show.RunWithOptions(ctx, show_opts)
+
+			if err != nil {
+				panic(err)
+			}
+		}()
 
 	default:
 
 		d, err := dispatcher.NewDispatcher(ctx, dispatcher_uri)
 
 		if err != nil {
-			return err
+			return fmt.Errorf("Failed to create new dispatcher, %w", err)
 		}
 
 		dp = d
@@ -112,6 +157,8 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 
 	for {
 		select {
+		case <- ctx.Done():
+			break
 		case <-ticker.C:
 			process(ctx, dp, cache, mu, true, urls...)
 		}
@@ -136,12 +183,15 @@ func process(ctx context.Context, dp dispatcher.Dispatcher, cache *sync.Map, mu 
 
 func handle_posts(ctx context.Context, dp dispatcher.Dispatcher, cache *sync.Map, mu *sync.RWMutex, read bool, read_title bool, url string) {
 
-	slog.Debug("Handle posts", "url", url, "read", read)
+	logger := slog.Default()
+	logger = logger.With("url", url)
+	
+	logger.Debug("Handle posts", "read", read)
 
 	u, err := net_url.Parse(url)
 
 	if err != nil {
-		slog.Error("Failed to parse URL", "error", err)
+		logger.Error("Failed to parse URL", "error", err)
 		return
 	}
 
@@ -149,13 +199,13 @@ func handle_posts(ctx context.Context, dp dispatcher.Dispatcher, cache *sync.Map
 	p, err := parser.NewParser(ctx, p_uri)
 
 	if err != nil {
-		slog.Error("Failed to derive new parser", "uri", p_uri, "error", err)
+		logger.Error("Failed to derive new parser", "uri", p_uri, "error", err)
 	}
 
 	title, posts, err := p.GetPosts(ctx, url)
 
 	if err != nil {
-		slog.Error("Failed to retrieve posts", "url", url, "error", err)
+		logger.Error("Failed to retrieve posts", "url", url, "error", err)
 		return
 	}
 
@@ -179,7 +229,11 @@ func handle_posts(ctx context.Context, dp dispatcher.Dispatcher, cache *sync.Map
 				title_read = false
 			}
 
-			dp.Dispatch(ctx, p)
+			err := dp.Dispatch(ctx, p)
+
+			if err != nil {
+				logger.Error("Failed to dispatch post", "error", err)
+			}
 		}
 	}
 }

@@ -182,6 +182,9 @@ github.com/hpcloud/tail/ratelimiter
 github.com/hpcloud/tail/util
 github.com/hpcloud/tail/watch
 github.com/hpcloud/tail/winfile
+# github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
+## explicit; go 1.14
+github.com/pkg/browser
 # github.com/redis/go-redis/v9 v9.20.0
 ## explicit; go 1.24
 github.com/redis/go-redis/v9
@@ -207,6 +210,16 @@ github.com/sfomuseum/go-flags/flagset
 github.com/sfomuseum/go-pubsub
 github.com/sfomuseum/go-pubsub/publisher
 github.com/sfomuseum/go-pubsub/subscriber
+# github.com/sfomuseum/go-www-show/v2 v2.0.0
+## explicit; go 1.23.0
+github.com/sfomuseum/go-www-show/v2
+# github.com/webview/webview_go v0.0.0-20240831120633-6173450d4dd6
+## explicit; go 1.13
+github.com/webview/webview_go
+github.com/webview/webview_go/libs/mswebview2
+github.com/webview/webview_go/libs/mswebview2/include
+github.com/webview/webview_go/libs/webview
+github.com/webview/webview_go/libs/webview/include
 # github.com/whosonfirst/go-pubssed v0.6.5
 ## explicit; go 1.25.0
 github.com/whosonfirst/go-pubssed/broker

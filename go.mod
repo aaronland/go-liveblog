@@ -10,6 +10,7 @@ require (
 	github.com/brianvoe/gofakeit/v7 v7.15.0
 	github.com/sfomuseum/go-flags v0.12.1
 	github.com/sfomuseum/go-pubsub v0.0.24
+	github.com/sfomuseum/go-www-show/v2 v2.0.0
 	github.com/whosonfirst/go-pubssed v0.6.5
 )
 
@@ -42,7 +43,9 @@ require (
 	github.com/google/wire v0.7.0 // indirect
 	github.com/googleapis/gax-go/v2 v2.19.0 // indirect
 	github.com/hpcloud/tail v1.0.0 // indirect
+	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c // indirect
 	github.com/redis/go-redis/v9 v9.20.0 // indirect
+	github.com/webview/webview_go v0.0.0-20240831120633-6173450d4dd6 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/otel v1.43.0 // indirect
 	go.opentelemetry.io/otel/metric v1.43.0 // indirect
