@@ -7,7 +7,7 @@ window.addEventListener("load", function load(event){
     const default_voice = 22;
     
     const count_voices = voices.length;
-    
+
     for (var i = 0; i < count_voices; i++) {
 
 	const opt = document.createElement("option");

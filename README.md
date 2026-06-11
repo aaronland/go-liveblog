@@ -2,10 +2,6 @@
 
 Go package for watching a variety of live blog events and reading them aloud using the operating system's text-to-speech APIs.
 
-## Important
-
-This is MacOS specific right now.
-
 ## Tools
 
 ```
@@ -33,6 +29,27 @@ Usage:
 The `follow` tool will keep a local cache of posts its already seen (and read) for the duration it is run.
 
 #### Example
+
+##### Random data
+
+```
+$> make debug
+go run -mod readonly cmd/follow/main.go -verbose http://random.localhost
+2026/06/11 09:33:17 DEBUG Verbose logging enabled
+2026/06/11 09:33:17 DEBUG Start broker subscriber=*subscriber.ChannelSubscriber
+2026/06/11 09:33:17 DEBUG Listen for pub sub messages
+2026/06/11 09:33:17 DEBUG Handle posts url=http://random.localhost read=false
+2026/06/11 09:33:17 DEBUG Start server
+2026/06/11 09:33:18 DEBUG HEAD request succeeded url=http://localhost:56017
+2026/06/11 09:33:18 INFO Server is ready and features are viewable url=http://localhost:56017
+2026/06/11 09:33:18 DEBUG Start broker HTTP handler "remote addr"=127.0.0.1:56022 time=2026-06-11T09:33:18.314-07:00
+2026/06/11 09:33:47 DEBUG Process URIs
+2026/06/11 09:33:47 DEBUG Handle posts url=http://random.localhost read=true
+2026/06/11 09:33:47 DEBUG pubsub dispatch="In summation, document the company and upgrade the rest. Guard problem with sensible limits."
+2026/06/11 09:33:47 DEBUG Broadcast message to clients count=1
+^C2026/06/11 09:33:55 INFO Shutdown signal received.
+make: *** [debug] Error 1
+```
 
 ##### The Guardian and Le Monde
 

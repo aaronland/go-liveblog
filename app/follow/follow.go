@@ -7,19 +7,19 @@ import (
 	"log/slog"
 	"net/http"
 	net_url "net/url"
-	"sync"
-	"time"
 	"os"
 	"os/signal"
+	"sync"
 	"syscall"
-	
+	"time"
+
 	"github.com/aaronland/go-liveblog/dispatcher"
 	"github.com/aaronland/go-liveblog/parser"
 	"github.com/aaronland/go-liveblog/static/www"
 	"github.com/sfomuseum/go-flags/flagset"
 	"github.com/sfomuseum/go-pubsub/publisher"
 	"github.com/sfomuseum/go-pubsub/subscriber"
-	"github.com/sfomuseum/go-www-show/v2"	
+	"github.com/sfomuseum/go-www-show/v2"
 	"github.com/whosonfirst/go-pubssed/broker"
 )
 
@@ -55,7 +55,7 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 			}
 		}
 	}()
-	
+
 	urls := fs.Args()
 
 	var dp dispatcher.Dispatcher
@@ -65,10 +65,12 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 	if err != nil {
 		return fmt.Errorf("Failed to parse dispatcher URI, %w", err)
 	}
-	
+
 	switch dp_u.Scheme {
-	case "web", "webview":	// read from constants in go-www-show/v2...
-		
+	case "webview": // read from constants in go-www-show/v2...
+		return fmt.Errorf("webview:// not supported at this time")
+	case "web": // read from constants in go-www-show/v2...
+
 		dp_ch := make(chan string)
 
 		pub, err := publisher.NewChannelPublisherWithChannel(ctx, dp_ch)
@@ -125,10 +127,11 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 		show_opts := &show.RunOptions{
 			Browser: browser,
 			Mux:     mux,
+			// Delay: 250 * time.Millisecond,
 		}
-		
+
 		go func() {
-			
+
 			err := show.RunWithOptions(ctx, show_opts)
 
 			if err != nil {
@@ -157,9 +160,10 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 
 	for {
 		select {
-		case <- ctx.Done():
+		case <-ctx.Done():
 			break
 		case <-ticker.C:
+			slog.Debug("Process URIs")
 			process(ctx, dp, cache, mu, true, urls...)
 		}
 	}
@@ -185,7 +189,7 @@ func handle_posts(ctx context.Context, dp dispatcher.Dispatcher, cache *sync.Map
 
 	logger := slog.Default()
 	logger = logger.With("url", url)
-	
+
 	logger.Debug("Handle posts", "read", read)
 
 	u, err := net_url.Parse(url)
