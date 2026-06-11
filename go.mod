@@ -7,6 +7,7 @@ go 1.25.0
 require (
 	github.com/aaronland/go-roster v1.0.0
 	github.com/anaskhan96/soup v1.2.5
+	github.com/brianvoe/gofakeit/v7 v7.15.0
 	github.com/sfomuseum/go-flags v0.12.1
 	github.com/sfomuseum/go-pubsub v0.0.24
 	github.com/whosonfirst/go-pubssed v0.6.5

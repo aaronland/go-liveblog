@@ -143,6 +143,11 @@ github.com/aws/smithy-go/traits
 github.com/aws/smithy-go/transport/http
 github.com/aws/smithy-go/transport/http/internal/io
 github.com/aws/smithy-go/waiter
+# github.com/brianvoe/gofakeit/v7 v7.15.0
+## explicit; go 1.22
+github.com/brianvoe/gofakeit/v7
+github.com/brianvoe/gofakeit/v7/data
+github.com/brianvoe/gofakeit/v7/source
 # github.com/cespare/xxhash/v2 v2.3.0
 ## explicit; go 1.11
 github.com/cespare/xxhash/v2
