@@ -14,9 +14,12 @@ import (
 	"github.com/aaronland/go-liveblog/parser"
 	"github.com/aaronland/go-liveblog/static/www"
 	"github.com/sfomuseum/go-flags/flagset"
+	"github.com/sfomuseum/go-pubsub/publisher"
 	"github.com/sfomuseum/go-pubsub/subscriber"
 	"github.com/whosonfirst/go-pubssed/broker"
 )
+
+const WWW_DISPATCHER string = "www://"
 
 func Run(ctx context.Context) error {
 	fs := DefaultFlagSet()
@@ -34,21 +37,36 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 
 	urls := fs.Args()
 
-	dp, err := dispatcher.NewDispatcher(ctx, dispatcher_uri)
+	var dp dispatcher.Dispatcher
 
-	if err != nil {
-		return err
-	}
+	switch dispatcher_uri {
+	case WWW_DISPATCHER:
 
-	if www_ui {
+		dp_ch := make(chan string)
 
-		mux := http.NewServeMux()
-
-		sub, err := subscriber.NewSubscriber(ctx, "redis://?host=localhost&port=6379&channel=pubssed")
+		pub, err := publisher.NewChannelPublisherWithChannel(ctx, dp_ch)
 
 		if err != nil {
 			return err
 		}
+
+		sub, err := subscriber.NewChannelSubscriberWithChannel(ctx, dp_ch)
+
+		if err != nil {
+			return nil
+		}
+
+		defer sub.Close()
+
+		d, err := dispatcher.NewPubSubDispatcherWithPublisher(ctx, pub)
+
+		if err != nil {
+			return err
+		}
+
+		dp = d
+
+		mux := http.NewServeMux()
 
 		brkr, err := broker.NewBroker()
 
@@ -72,6 +90,16 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 		mux.Handle("/", index_handler)
 
 		go http.ListenAndServe("localhost:8080", mux)
+
+	default:
+
+		d, err := dispatcher.NewDispatcher(ctx, dispatcher_uri)
+
+		if err != nil {
+			return err
+		}
+
+		dp = d
 	}
 
 	cache := new(sync.Map)

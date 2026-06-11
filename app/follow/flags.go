@@ -12,7 +12,6 @@ var delay int
 var read_all bool
 var verbose bool
 
-var www_ui bool
 var dispatcher_uri string
 
 func DefaultFlagSet() *flag.FlagSet {
@@ -22,8 +21,7 @@ func DefaultFlagSet() *flag.FlagSet {
 	fs.IntVar(&delay, "delay", 30, "The number of seconds to wait before fetching new updates")
 	fs.BoolVar(&read_all, "read-all", false, "If true read all previous posts (written before following has begun)")
 	fs.BoolVar(&verbose, "verbose", false, "Enable verbose (debug) logging.")
-	fs.StringVar(&dispatcher_uri, "dispatcher-uri", "say://", "...")
-	fs.BoolVar(&www_ui, "www", false, "...")
+	fs.StringVar(&dispatcher_uri, "dispatcher-uri", WWW_DISPATCHER, "...")
 
 	fs.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Parse one or more \"live blog\" URLs and read them aloud.\n")

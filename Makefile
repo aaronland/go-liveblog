@@ -6,3 +6,6 @@ vuln:
 
 cli:
 	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/follow cmd/follow/main.go	
+
+debug:
+	go run -mod $(GOMOD) cmd/follow/main.go -verbose http://random.localhost
