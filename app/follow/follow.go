@@ -5,15 +5,15 @@ import (
 	"flag"
 	"fmt"
 	"log/slog"
+	"net/http"
 	net_url "net/url"
 	"sync"
 	"time"
-	"net/http"
-	
+
 	"github.com/aaronland/go-liveblog/dispatcher"
 	"github.com/aaronland/go-liveblog/parser"
 	"github.com/sfomuseum/go-flags/flagset"
-	"github.com/sfomuseum/go-pubsub/subscriber"	
+	"github.com/sfomuseum/go-pubsub/subscriber"
 	"github.com/whosonfirst/go-pubssed/broker"
 )
 
@@ -33,40 +33,44 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 
 	urls := fs.Args()
 
-	foo := false
+	dp, err := dispatcher.NewDispatcher(ctx, dispatcher_uri)
 
-	if foo {
-		
+	if err != nil {
+		return err
+	}
+
+	if www {
+
 		sub, err := subscriber.NewSubscriber(ctx, "redis://?host=localhost&port=6379&channel=pubssed")
-		
+
 		if err != nil {
 			return err
 		}
-		
+
 		brkr, err := broker.NewBroker()
 
 		if err != nil {
 			return err
-		}	
+		}
 
 		http_handler, err := brkr.HandlerFunc()
 
 		if err != nil {
 			return err
 		}
-		
+
 		brkr.Start(ctx, sub)
 
 		mux := http.NewServeMux()
 		mux.HandleFunc("/", http_handler)
-		
+
 		go http.ListenAndServe("localhost:8080", mux)
 	}
-	
+
 	cache := new(sync.Map)
 	mu := new(sync.RWMutex)
 
-	process(ctx, cache, mu, read_all, urls...)
+	process(ctx, dp, cache, mu, read_all, urls...)
 
 	ticker := time.NewTicker(time.Duration(delay) * time.Second)
 	defer ticker.Stop()
@@ -74,14 +78,14 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 	for {
 		select {
 		case <-ticker.C:
-			process(ctx, cache, mu, true, urls...)
+			process(ctx, dp, cache, mu, true, urls...)
 		}
 	}
 
 	return nil
 }
 
-func process(ctx context.Context, cache *sync.Map, mu *sync.RWMutex, read bool, urls ...string) {
+func process(ctx context.Context, dp dispatcher.Dispatcher, cache *sync.Map, mu *sync.RWMutex, read bool, urls ...string) {
 
 	read_title := false
 
@@ -90,12 +94,12 @@ func process(ctx context.Context, cache *sync.Map, mu *sync.RWMutex, read bool, 
 	}
 
 	for _, url := range urls {
-		go handle_posts(ctx, cache, mu, read, read_title, url)
+		go handle_posts(ctx, dp, cache, mu, read, read_title, url)
 	}
 
 }
 
-func handle_posts(ctx context.Context, cache *sync.Map, mu *sync.RWMutex, read bool, read_title bool, url string) {
+func handle_posts(ctx context.Context, dp dispatcher.Dispatcher, cache *sync.Map, mu *sync.RWMutex, read bool, read_title bool, url string) {
 
 	slog.Debug("Handle posts", "url", url, "read", read)
 
@@ -111,13 +115,6 @@ func handle_posts(ctx context.Context, cache *sync.Map, mu *sync.RWMutex, read b
 
 	if err != nil {
 		slog.Error("Failed to derive new parser", "uri", p_uri, "error", err)
-	}
-
-	dp_uri := fmt.Sprintf("%s://", u.Host)
-	dp, err := dispatcher.NewDispatcher(ctx, dp_uri)
-
-	if err != nil {
-		slog.Error("Failed to derive new dispatcher", "uri", dp_uri, "error", err)
 	}
 
 	title, posts, err := p.GetPosts(ctx, url)

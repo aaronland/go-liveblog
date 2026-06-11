@@ -12,6 +12,7 @@ import (
 
 type Dispatcher interface {
 	Dispatch(context.Context, string) error
+	Scheme() string
 }
 
 var dispatcher_roster roster.Roster
