@@ -100,7 +100,7 @@ And in the browser:
 
 Dispatch posts a PubSub-style publisher using the [sfomuseum/go-pubsub](https://github.com/sfomuseum/go-pubsub) package. The PubSub dispatcher is instantiated by URIs defined in the `go-pubsub` package.
 
-Note that _subscribers_ of these PubSub-style messages need to be implemented as needed in your own code.
+Note that _subscribers_ of these PubSub-style messages should be implemented as necessary in your own code.
 
 ### Say
 
