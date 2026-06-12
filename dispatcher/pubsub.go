@@ -3,18 +3,20 @@ package dispatcher
 import (
 	"context"
 	"fmt"
-	"log/slog"
 	"strings"
 
 	"github.com/sfomuseum/go-pubsub/publisher"
 )
 
+// PubSubDispatcher implements the Dispatcher interface for a PubSub-based
+// messaging system using the `sfomuseum/go-pubsub` package.
 type PubSubDispatcher struct {
 	Dispatcher
 	publisher publisher.Publisher
 }
 
 func init() {
+
 	ctx := context.Background()
 
 	for _, scheme := range publisher.PublisherSchemes() {
@@ -29,6 +31,9 @@ func init() {
 	}
 }
 
+// NewPubSubDispatcher creates a new PubSubDispatcher by initializing the
+// underlying publisher using the provided URI which is expected to be a
+// registered `sfomuseum/go-pubsub/publisher` URI.
 func NewPubSubDispatcher(ctx context.Context, uri string) (Dispatcher, error) {
 
 	p, err := publisher.NewPublisher(ctx, uri)
@@ -40,6 +45,8 @@ func NewPubSubDispatcher(ctx context.Context, uri string) (Dispatcher, error) {
 	return NewPubSubDispatcherWithPublisher(ctx, p)
 }
 
+// NewPubSubDispatcherWithPublisher is a helper constructor that takes an
+// already initialized publisher.
 func NewPubSubDispatcherWithPublisher(ctx context.Context, p publisher.Publisher) (Dispatcher, error) {
 
 	s := &PubSubDispatcher{
@@ -49,7 +56,7 @@ func NewPubSubDispatcherWithPublisher(ctx context.Context, p publisher.Publisher
 	return s, nil
 }
 
+// Dispatch sends the payload to the PubSub publisher.
 func (s *PubSubDispatcher) Dispatch(ctx context.Context, post string) error {
-	slog.Debug("pubsub", "dispatch", post)
 	return s.publisher.Publish(ctx, post)
 }

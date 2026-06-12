@@ -11,6 +11,9 @@ import (
 	"github.com/anaskhan96/soup"
 )
 
+// LaPresseParser implements the parser.Parser interface for
+// extracting content from lapresse.ca webpages, including handling
+// embedded content from Norkon.
 type LaPresseParser struct {
 	parser.Parser
 }
@@ -26,11 +29,14 @@ func init() {
 	}
 }
 
+// NewLaPresseParser creates a new instance of a LaPresseParser.
 func NewLaPresseParser(ctx context.Context, uri string) (parser.Parser, error) {
 	p := &LaPresseParser{}
 	return p, nil
 }
 
+// GetPosts fetches the page content from the provided URL and extracts
+// the title and the list of paragraphs.
 func (p *LaPresseParser) GetPosts(ctx context.Context, url string) (string, []string, error) {
 
 	rsp, err := soup.Get(url)

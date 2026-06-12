@@ -1,3 +1,6 @@
+// Package dispatcher provides a registry and factory system for different
+// message dispatching methods. It allows for pluggable transport layers
+// (e.g., PubSub, local system commands) based on URI schemes.
 package dispatcher
 
 import (
@@ -10,9 +13,12 @@ import (
 	"github.com/aaronland/go-roster"
 )
 
+// Dispatcher defines the behaviour for sending a message payload.
+// Implementations of this interface are responsible for handling the
+// actual transmission logic for a specific transport medium.
 type Dispatcher interface {
+	// Dispatch sends the provided string message to the destination.
 	Dispatch(context.Context, string) error
-	Scheme() string
 }
 
 var dispatcher_roster roster.Roster

@@ -7,6 +7,8 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 )
 
+// RandomParser implements the parser.Parser interface by generating
+// synthetic data using a fake data library.
 type RandomParser struct {
 	parser.Parser
 }
@@ -24,11 +26,15 @@ func init() {
 	}
 }
 
+// NewRandomParser creates a new instance of a RandomParser.
 func NewRandomParser(ctx context.Context, uri string) (parser.Parser, error) {
 	p := &RandomParser{}
 	return p, nil
 }
 
+// GetPosts returns a randomly generated title and a single
+// paragraph of dummy text. This implementation does not
+// perform any actual network requests.
 func (p *RandomParser) GetPosts(ctx context.Context, url string) (string, []string, error) {
 
 	title := gofakeit.Sentence(6)
