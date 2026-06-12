@@ -1,3 +1,6 @@
+// Package parser provides a registry and factory system for different
+// content parsing strategies. It allows for pluggable parsers based on
+// URI schemes.
 package parser
 
 import (
@@ -10,7 +13,11 @@ import (
 	"github.com/aaronland/go-roster"
 )
 
+// Parser defines the behavior for extracting data from a source.
+// Implementations are responsible for interpreting the content based on
+// the specific logic required by the scheme.
 type Parser interface {
+	// GetPosts extracts the title and a list of posts from a source identifed by a URI.
 	GetPosts(context.Context, string) (string, []string, error)
 }
 

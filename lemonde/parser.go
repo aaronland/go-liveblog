@@ -9,6 +9,8 @@ import (
 	"github.com/anaskhan96/soup"
 )
 
+// LeMondeParser implements the parser.Parser interface specifically
+// for extracting content from the lemonde.fr website.
 type LeMondeParser struct {
 	parser.Parser
 }
@@ -24,11 +26,14 @@ func init() {
 	}
 }
 
+// NewLeMondeParser creates a new instance of a LeMondeParser.
 func NewLeMondeParser(ctx context.Context, uri string) (parser.Parser, error) {
 	p := &LeMondeParser{}
 	return p, nil
 }
 
+// GetPosts fetches the page content from the provided URL and extracts
+// the title and the list of posts.
 func (p *LeMondeParser) GetPosts(ctx context.Context, url string) (string, []string, error) {
 
 	rsp, err := soup.Get(url)

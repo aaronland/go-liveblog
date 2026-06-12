@@ -8,6 +8,7 @@ import (
 	_ "github.com/aaronland/go-liveblog/guardian"
 	_ "github.com/aaronland/go-liveblog/lapresse"
 	_ "github.com/aaronland/go-liveblog/lemonde"
+	_ "github.com/aaronland/go-liveblog/random"
 )
 
 func main() {

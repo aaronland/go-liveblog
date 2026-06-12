@@ -12,6 +12,8 @@ var delay int
 var read_all bool
 var verbose bool
 
+var dispatcher_uri string
+
 func DefaultFlagSet() *flag.FlagSet {
 
 	fs := flagset.NewFlagSet("follow")
@@ -19,6 +21,7 @@ func DefaultFlagSet() *flag.FlagSet {
 	fs.IntVar(&delay, "delay", 30, "The number of seconds to wait before fetching new updates")
 	fs.BoolVar(&read_all, "read-all", false, "If true read all previous posts (written before following has begun)")
 	fs.BoolVar(&verbose, "verbose", false, "Enable verbose (debug) logging.")
+	fs.StringVar(&dispatcher_uri, "dispatcher-uri", WWW_DISPATCHER, "A registered aaronland/go-liveblog/dispatcher.Dispatcher URI where posts will be sent.")
 
 	fs.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Parse one or more \"live blog\" URLs and read them aloud.\n")

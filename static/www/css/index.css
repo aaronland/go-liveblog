@@ -1,0 +1,27 @@
+#voices {
+	display: none;
+	margin-top:1.5rem;
+}
+
+#messages {
+	padding-left: 0px !important;
+	list-style-type: none !important;
+	margin-top: 1.5rem;
+	max-height: 90vh;
+	overflow: scroll;
+}
+
+#messages li {
+	font-size: 1.8rem;
+	line-height: 2.6rem;
+	margin-bottom: 1.5rem;
+	font-family: serif;
+}
+
+.timestamp {
+	font-weight: 700;
+}
+
+.timestamp:after {
+	content: " – ";
+}

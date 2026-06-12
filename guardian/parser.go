@@ -9,6 +9,8 @@ import (
 	"github.com/anaskhan96/soup"
 )
 
+// GuardianParser implements the parser.Parser interface specifically
+// for scraping content from The Guardian's web pages.
 type GuardianParser struct {
 	parser.Parser
 }
@@ -26,11 +28,14 @@ func init() {
 	}
 }
 
+// NewGuardianParser creates a new instance of a GuardianParser.
 func NewGuardianParser(ctx context.Context, uri string) (parser.Parser, error) {
 	p := &GuardianParser{}
 	return p, nil
 }
 
+// GetPosts fetches the page content from the provided URL and extracts
+// the title and the list of paragraphs.
 func (p *GuardianParser) GetPosts(ctx context.Context, url string) (string, []string, error) {
 
 	rsp, err := soup.Get(url)
