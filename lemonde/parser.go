@@ -42,6 +42,11 @@ func (p *LeMondeParser) GetPosts(ctx context.Context, url string) (string, []str
 		return "", nil, fmt.Errorf("Failed to retrieve %s, %w", url, err)
 	}
 
+	return p.GetPostsFromText(ctx, rsp)
+}
+
+func (p *LeMondeParser) GetPostsFromText(ctx context.Context, rsp string) (string, []string, error) {
+
 	posts := make([]string, 0)
 
 	doc := soup.HTMLParse(rsp)

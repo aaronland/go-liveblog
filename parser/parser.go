@@ -19,6 +19,7 @@ import (
 type Parser interface {
 	// GetPosts extracts the title and a list of posts from a source identifed by a URI.
 	GetPosts(context.Context, string) (string, []string, error)
+	GetPostsFromText(context.Context, string) (string, []string, error)
 }
 
 var parser_roster roster.Roster

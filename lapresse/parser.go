@@ -45,9 +45,14 @@ func (p *LaPresseParser) GetPosts(ctx context.Context, url string) (string, []st
 		return "", nil, fmt.Errorf("Failed to retrieve %s, %w", url, err)
 	}
 
+	return p.GetPostsFromText(ctx, rsp)
+}
+
+func (p *LaPresseParser) GetPostsFromText(ctx context.Context, txt string) (string, []string, error) {
+
 	posts := make([]string, 0)
 
-	doc := soup.HTMLParse(rsp)
+	doc := soup.HTMLParse(txt)
 
 	title_el := doc.Find("title")
 	title := title_el.FullText()

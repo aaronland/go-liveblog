@@ -125,9 +125,8 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 		}
 
 		show_opts := &show.RunOptions{
-			Browser:            browser,
-			Mux:                mux,
-			EnsureServiceDelay: 500 * time.Millisecond,
+			Browser: browser,
+			Mux:     mux,
 		}
 
 		go func() {

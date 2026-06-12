@@ -9,3 +9,10 @@ cli:
 
 debug:
 	go run -mod $(GOMOD) cmd/follow/main.go -verbose http://random.localhost
+
+
+wasmjs:
+	GOOS=js GOARCH=wasm \
+		go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -tags wasmjs \
+		-o static/wasm/get-posts.wasm \
+		cmd/get-posts-wasmjs/main.go

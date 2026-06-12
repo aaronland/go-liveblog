@@ -37,6 +37,11 @@ func NewRandomParser(ctx context.Context, uri string) (parser.Parser, error) {
 // perform any actual network requests.
 func (p *RandomParser) GetPosts(ctx context.Context, url string) (string, []string, error) {
 
+	return p.GetPostsFromText(ctx, "")
+}
+
+func (p *RandomParser) GetPostsFromText(ctx context.Context, txt string) (string, []string, error) {
+
 	title := gofakeit.Sentence(6)
 	post := gofakeit.Paragraph()
 
