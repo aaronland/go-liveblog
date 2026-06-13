@@ -13,10 +13,16 @@ cloud.google.com/go/pubsub/v2 v2.4.0 h1:oMKNiBQpXImRWnHYla9uSU66ZzByZwBSCJOEs/pT
 cloud.google.com/go/pubsub/v2 v2.4.0/go.mod h1:2lS/XQKq5qtOMs6kHBK+WX1ytUC36kLl2ig3zqsGUx8=
 github.com/aaronland/go-aws/v3 v3.7.0 h1:ZPCT9VWyenV5m1iIUM+rSKOoHlAZiKaKyEp2HlbYYMM=
 github.com/aaronland/go-aws/v3 v3.7.0/go.mod h1:c2+DbCIEABV1RjvYOK9UDwzJbTSmRfeXrfWpg5tQbbs=
+github.com/aaronland/go-http/v4 v4.0.3 h1:r3LY5ao2bsFiaXAgAblapvci4y/tq5SQB8CdKrjpr5E=
+github.com/aaronland/go-http/v4 v4.0.3/go.mod h1:whP6xvKeNGCgpxnEtMiTDjacgFCOgHIVY39T2P6VD6c=
 github.com/aaronland/go-roster v1.0.0 h1:FRDGrTqsYySKjWnAhbBGXyeGlI/o5/t9FZYCbUmyQtI=
 github.com/aaronland/go-roster v1.0.0/go.mod h1:KIsYZgrJlAsyb9LsXSCvlqvbcCBVjCSqcQiZx42i9ro=
+github.com/akrylysov/algnhsa v1.1.0 h1:G0SoP16tMRyiism7VNc3JFA0wq/cVgEkp/ExMVnc6PQ=
+github.com/akrylysov/algnhsa v1.1.0/go.mod h1:+bOweRs/WBu5awl+ifCoSYAuKVPAmoTk8XOMrZ1xwiw=
 github.com/anaskhan96/soup v1.2.5 h1:V/FHiusdTrPrdF4iA1YkVxsOpdNcgvqT1hG+YtcZ5hM=
 github.com/anaskhan96/soup v1.2.5/go.mod h1:6YnEp9A2yywlYdM4EgDz9NEHclocMepEtku7wg6Cq3s=
+github.com/aws/aws-lambda-go v1.53.0 h1:uAMv6W/vCP/L494BAUSxe+8KVBIPK+SGPyapFt3FuMk=
+github.com/aws/aws-lambda-go v1.53.0/go.mod h1:dpMpZgvWx5vuQJfBt0zqBha60q7Dd7RfgJv23DymV8A=
 github.com/aws/aws-sdk-go-v2 v1.42.0 h1:XvXMJTkFQtpBKIWZnmr9ZEOc2InWM2yldjXEJ/bymhA=
 github.com/aws/aws-sdk-go-v2 v1.42.0/go.mod h1:27+ACypSLljLAEKsCYOmrjKh83vuTRkuAe9Uv/3A4bg=
 github.com/aws/aws-sdk-go-v2/config v1.32.23 h1:PYDobtcsJXK6bQe9I8RQk6s19Bz3xa3xRU08Hy1Em3Y=

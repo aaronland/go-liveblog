@@ -5,6 +5,7 @@ replace github.com/hpcloud/tail v1.0.0 => github.com/sfomuseum/tail v1.0.2
 go 1.25.0
 
 require (
+	github.com/aaronland/go-http/v4 v4.0.3
 	github.com/aaronland/go-roster v1.0.0
 	github.com/anaskhan96/soup v1.2.5
 	github.com/brianvoe/gofakeit/v7 v7.15.0
@@ -16,6 +17,8 @@ require (
 
 require (
 	github.com/aaronland/go-aws/v3 v3.7.0 // indirect
+	github.com/akrylysov/algnhsa v1.1.0 // indirect
+	github.com/aws/aws-lambda-go v1.53.0 // indirect
 	github.com/aws/aws-sdk-go-v2 v1.42.0 // indirect
 	github.com/aws/aws-sdk-go-v2/config v1.32.23 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.22 // indirect

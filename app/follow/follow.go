@@ -13,9 +13,9 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/aaronland/go-liveblog/app/follow/www"
 	"github.com/aaronland/go-liveblog/dispatcher"
 	"github.com/aaronland/go-liveblog/parser"
-	"github.com/aaronland/go-liveblog/app/follow/www"
 	"github.com/sfomuseum/go-flags/flagset"
 	"github.com/sfomuseum/go-pubsub/publisher"
 	"github.com/sfomuseum/go-pubsub/subscriber"
@@ -125,8 +125,8 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 		}
 
 		show_opts := &show.RunOptions{
-			Browser: browser,
-			Mux:     mux,
+			Browser:            browser,
+			Mux:                mux,
 			EnsureServiceDelay: 200 * time.Millisecond,
 		}
 
