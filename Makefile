@@ -14,5 +14,5 @@ debug:
 wasmjs:
 	GOOS=js GOARCH=wasm \
 		go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -tags wasmjs \
-		-o static/wasm/get-posts.wasm \
+		-o app/follow_wasm/www/wasm/get-posts.wasm \
 		cmd/get-posts-wasmjs/main.go
