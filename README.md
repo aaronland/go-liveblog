@@ -46,6 +46,8 @@ Extracts posts from live blogging pages on `lapresse.ca` website.
 
 Extracts posts from live blogging pages on `lemonde.fr` website.
 
+_Note: This does not work as of June, 2026. There is no ETA on a remedy yet._
+
 ### Random data (debugging)
 
 Generate random post data (for debugging).
